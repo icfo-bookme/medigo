@@ -1,0 +1,5 @@
+User-agent: *
+
+allow: /
+
+Sitemap: https://www.medigo.com.bd/sitemap.xml
