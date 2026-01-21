@@ -14,7 +14,7 @@ const ShopCategorySlider = ({ data }) => {
         <div className="relative bg-white mt-10 sm:mt-8 py-10 md:py-5 sm:py-4 px-2">
             <div className="max-w-[90rem] lg:max-w-[70rem] mx-auto">
                 <div className="flex justify-between items-center mb-5">
-                    <p className="text-3xl sm:text-xl text-deepBlue-800 font-semibold tracking-wider">
+                    <p className="text-xl text-deepBlue-800 font-semibold tracking-wider">
                         Shop By Category
                     </p>
                     <Link href={`/all-category`}>
@@ -41,8 +41,8 @@ const ShopCategorySlider = ({ data }) => {
                         breakpoints={{
                             270: { slidesPerView: 1.3, spaceBetween: 9 },
                             320: { slidesPerView: 1.5, spaceBetween: 9 },
-                            375: { slidesPerView: 2.2, spaceBetween: 10 },
-                            425: { slidesPerView: 4.3, spaceBetween: 15 },
+                            375: { slidesPerView: 3.2, spaceBetween: 10 },
+                            425: { slidesPerView: 3.7, spaceBetween: 15 },
                             480: { slidesPerView: 2.5, spaceBetween: 18 },
                             768: { slidesPerView: 3.5, spaceBetween: 18 },
                             1024: { slidesPerView: 3.5, spaceBetween: 18 },
@@ -64,20 +64,21 @@ const ShopCategorySlider = ({ data }) => {
                                                 className="object-contain group-hover:scale-110 transition duration-300"
                                             />
                                         </div>
-                                        <p className="text-sm font-semibold text-center mt-3 text-black">
+                                       
+                                    </div>
+                                     <p className="text-sm font-semibold text-center mt-3 text-black">
                                             {item.name}
                                         </p>
-                                    </div>
                                 </Link>
                             </SwiperSlide>
                         ))}
 
                         {/* Navigation Buttons */}
-                        <button className="button-prev-slide w-[30px] h-[30px] rounded-full shadow-xl drop-shadow-lg hover:scale-150 transition duration-200 bg-gradient-to-r from-lightBlue-400 to-deepBlue-800 text-white grid place-items-center absolute top-[35px] md:top-[18px] sm:top-[15px] xls:top-[5px] xms:top-[5px] xs:top-[5px] right-[270px] lg:right-[190px] md:right-[190px] sm:right-[190px] xls:right-[150px] xms:right-[150px] xs:right-[150px] cursor-pointer">
+                        <button className="button-prev-slide w-[30px] h-[30px] rounded-full shadow-xl drop-shadow-lg hover:scale-150 transition duration-200 bg-gradient-to-r from-lightBlue-400 to-deepBlue-800 text-white grid place-items-center absolute top-[35px] md:top-[18px] sm:top-[25px] xls:top-[38px] xms:top-[5px] xs:top-[5px] right-[270px] lg:right-[190px] md:right-[190px] sm:right-[190px] xls:right-[150px] xms:right-[150px] xs:right-[150px] cursor-pointer">
                             <MdOutlineKeyboardArrowLeft size={20} className="text-primary" />
                         </button>
 
-                        <button className="button-next-slide w-[30px] h-[30px] rounded-full shadow-xl drop-shadow-lg hover:scale-150 transition duration-200 bg-gradient-to-r from-lightBlue-400 to-deepBlue-800 text-white grid place-items-center absolute top-[35px] md:top-[18px] sm:top-[15px] xls:top-[5px] xms:top-[5px] xs:top-[5px]  right-[190px] lg:right-[120px] md:right-[120px] sm:right-[120px] xls:right-[100px]  xms:right-[100px] xs:right-[100px] cursor-pointer">
+                        <button className="button-next-slide w-[30px] h-[30px] rounded-full shadow-xl drop-shadow-lg hover:scale-150 transition duration-200 bg-gradient-to-r from-lightBlue-400 to-deepBlue-800 text-white grid place-items-center absolute top-[35px] md:top-[18px] sm:top-[25px] xls:top-[38px] xms:top-[5px] xs:top-[5px]  right-[190px] lg:right-[120px] md:right-[120px] sm:right-[120px] xls:right-[100px]  xms:right-[100px] xs:right-[100px] cursor-pointer">
                             <MdOutlineKeyboardArrowRight size={20} className="text-primary" />
                         </button>
                     </Swiper>

@@ -215,23 +215,24 @@ export default function Home({ sectionData, slider, orderWithCall, video, campai
           </ul>
         </div>
 
-        {video?.length > 0 && (
-          <div className="pt-6 grid grid-cols-3 sm:grid-cols-2 xls:grid-cols-1 xms:grid-cols-1 xs:grid-cols-1">
-            {video.map((item, index) => (
-              <div className="p-3" key={item.id || index}>
-                <ReactPlayer
-                  url={item?.url}
-                  width="100%"
-                  height="400px"
-                  volume={1}
-                  controls
-                />
-                <p className="font-semibold text-black pt-2">{item?.title}</p>
-              </div>
-            ))}
-          </div>
-        )}
-
+        <div className='hidden md:block'>
+          {video?.length > 0 && (
+            <div className="pt-6 grid grid-cols-3 sm:grid-cols-2 xls:grid-cols-1 xms:grid-cols-1 xs:grid-cols-1">
+              {video.map((item, index) => (
+                <div className="p-3" key={item.id || index}>
+                  <ReactPlayer
+                    url={item?.url}
+                    width="100%"
+                    height="220px"
+                    volume={1}
+                    controls
+                  />
+                  <p className="font-semibold text-black pt-2">{item?.title}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {campaignRes && <CampaignComponent campaignRes={campaignRes} />}
         <div className="hidden ">
           {cat && <ShopCategory data={cat} />}
