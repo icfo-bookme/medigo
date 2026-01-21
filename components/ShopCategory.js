@@ -7,12 +7,8 @@ import React, { useEffect, useState } from 'react'
 
 const ShopCategory = ({data}) => {
 
-
-
-
-
   return (
-    <div className="bg-white mt-10 md:mt-10 sm:mt-8 xls:mt-4 xms:mt-4 xs:mt-4 p-10 md:p-5 lg:p-2 xls:p-4 xms:p-3 xs:p-3">
+    <div className="bg-white   mt-10 md:mt-10 sm:mt-8 xls:mt-4 xms:mt-4 xs:mt-4 p-10 md:p-5 lg:p-2 xls:p-4 xms:p-3 xs:p-3">
       <div className="max-w-[90rem] mx-auto">
         <div className="mb-5 sm:mb-2 xls:mb-2 xms:mb-2 xs:mb-1 flex justify-between">
           <p className="text-3xl sm:text-xl xls:text-base xms:text-base xs:text-base text-center text-deepBlue-800 font-semibold tracking-wider">

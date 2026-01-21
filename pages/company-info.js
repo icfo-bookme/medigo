@@ -6,8 +6,6 @@ const CompanyInfo = ({Data}) => {
 
   return (
     <>
-     
-
       <div className="bg-gray-100 min-h-[722px] pt-5">
         <section>
           <div className="container px-2 py-2 mx-auto">

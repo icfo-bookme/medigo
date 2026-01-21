@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { BsMessenger, BsPhone, BsReverseLayoutTextSidebarReverse, BsTelephoneFill, BsWhatsapp } from 'react-icons/bs'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import dynamic from 'next/dynamic'
+import ShopCategorySlider from '@/components/ShopCategorySlider'
 
 // Dynamically import ReactPlayer to avoid SSR issues
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
@@ -61,11 +62,10 @@ export default function Home({ sectionData, slider, orderWithCall, video, campai
 
         <div className="max-w-[90rem] mx-auto">
           <div
-            className={`${
-              !open && isFixed
-                ? "fixed top-[60px] left-[310px] sm:left-0 sm:top-[90px] xls:left-0 xls:top-[80px] xms:left-0 xms:top-[80px] xs:left-0 xs:top-[80px] right-0 z-10 shadow-md"
-                : ""
-            } mx-auto mt-5`}
+            className={`${!open && isFixed
+              ? " top-[60px] left-[310px] sm:left-0 sm:top-[90px] xls:left-0 xls:top-[80px] xms:left-0 xms:top-[80px] xs:left-0 xs:top-[80px] right-0 z-10 shadow-md"
+              : ""
+              } mx-auto mt-5`}
           >
             <div className="flex justify-between space-x-4 bg-white z-5 xls:block xms:block xs:block py-4 px-4 rounded-md">
               <div className="flex items-center justify-center space-x-4">
@@ -233,8 +233,14 @@ export default function Home({ sectionData, slider, orderWithCall, video, campai
         )}
 
         {campaignRes && <CampaignComponent campaignRes={campaignRes} />}
+        <div className="hidden ">
+          {cat && <ShopCategory data={cat} />}
+        </div>
 
-        {cat && <ShopCategory data={cat} />}
+        <div className="hidden sm:block xls:block xms:block xs:block">
+          {cat && <ShopCategorySlider data={cat} />}
+        </div>
+
 
         {sectionData?.map((section, index) => (
           section?.products?.length > 0 && (

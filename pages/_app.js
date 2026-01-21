@@ -8,14 +8,7 @@ import "react-tabs/style/react-tabs.css";
 import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
 
-
-
-
-
-
 export default function App({ Component, pageProps }) {
- 
-
   
   return (
     <StatusProvider>

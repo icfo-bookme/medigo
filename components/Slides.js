@@ -9,10 +9,6 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 const Slides = ({slider}) => {
-
-
-
- 
   return (
     <div>
       <div className="relative ">
@@ -34,6 +30,7 @@ const Slides = ({slider}) => {
           {slider?.map((item, index) => (
             <SwiperSlide key={index}>
               <div className="h-[400px] md:h-[330px] sm:h-[300px] xls:h-[180px] xms:h-[180px] xs:h-[180px] ">
+                {/* <p>`{ImageHostName}/storage/{item?.image}`</p> */}
                 {item?.url ? (
                   <Link href={`${item?.url}`} target="_blank">
                     <Image

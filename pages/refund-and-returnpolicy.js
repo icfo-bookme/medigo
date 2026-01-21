@@ -5,8 +5,6 @@ const RefundPolicy = ({data}) => {
    
   return (
     <>
-   
-
       <div className="bg-gray-100 min-h-[670px] pt-20">
         <section>
           <div className="container px-6 py-10 mx-auto">

@@ -126,8 +126,6 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-   
-  
 
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setOpen(false);
@@ -359,14 +357,14 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
                     onClick={handleGetLocation}
                   >
                     {!fullAddress ? (
-                      <p className="text-black lg:text-sm md:text-sm">
+                      <p className="text-black mt-1 lg:text-sm md:text-sm">
                         Select your location
                       </p>
                     ) : (
                       <div className="flex space-x-2 items-center lg:text-sm  md:text-xs text-black">
-                        <p>Deliver to:</p>
-                        <p>
-                          {quarter},{suburb},{city}
+                        {/* <p>Deliver to:</p> */}
+                        <p className="font-bold mt-1 text-sm">
+                          {city}
                         </p>
                       </div>
                     )}
@@ -831,7 +829,7 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
                         <div className="flex space-x-2 items-center text-black xms:text-sm xs:text-xs">
                           <p>Deliver to:</p>
                           <p>
-                            {quarter},{suburb},{city}
+                           {city} 
                           </p>
                         </div>
                       )}

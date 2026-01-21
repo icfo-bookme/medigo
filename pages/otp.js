@@ -32,10 +32,6 @@ const Otp = () => {
     
 
     if(res?.success){
-
-
-      
-        
         setToken(res?.token);
         setCookie(null, "token", res?.token, {
           maxAge: 24 * 60 * 60,

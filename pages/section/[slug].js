@@ -40,8 +40,6 @@ const SectionSlug = ({ Data, totalData }) => {
 
   return (
     <>
-    
-
       <div className="bg-white">
         <div className="max-w-[90rem] mx-auto min-h-[722px] pb-3 pt-1">
           

@@ -49,13 +49,13 @@ const SidebarSubCategory = ({ item }) => {
           className="flex space-x-5 items-center"
           onClick={() => handleClick(item?.slug)}
         >
-          <div>
+          <div className="flex items-center justify-center bg-white rounded-full shadow-sm ">
             <Image 
               height={24}
               width={24}
               alt="product"
               src={`${ImageHostName}/storage/product/${item?.image}`}
-              className="h-6 w-6"
+              className="h-6 w-6  rounded-full object-contain"
             />
           </div>
 
@@ -91,16 +91,16 @@ const SidebarSubCategory = ({ item }) => {
         ) : null}
       </button>
     
-        <ul className="  group-hover:block hidden ml-10 border-l pl-2 border-gray-300  space-y-2 transition-all duration-300">
+        <ul className="  group-hover:block hidden ml-10 border-l pl-2 border-gray-300   transition-all duration-300">
           {item?.children_category?.length > 0 &&
             item?.children_category?.map((item, subindex) => (
               <li
                 className={`list-none text-sm border-none 
-                      py-2   text-black`}
+                        text-black`}
                 key={subindex}
               >
                 <Link href={`/category/${item?.slug}`}>
-                  <p className="text-black line-clamp-1">{item?.name}</p>
+                  <p className="text-black line-clamp-1 font-bold capitalize hover:bg-[#DBEAFE] p-2">{item?.name}</p>
                 </Link>
               </li>
             ))}
