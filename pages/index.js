@@ -215,7 +215,7 @@ export default function Home({ sectionData, slider, orderWithCall, video, campai
           </ul>
         </div>
 
-        <div className='hidden md:block'>
+        <div className='hidden md:block lg:block xl:block xxl:block sm:block'>
           {video?.length > 0 && (
             <div className="pt-6 grid grid-cols-3 sm:grid-cols-2 xls:grid-cols-1 xms:grid-cols-1 xs:grid-cols-1">
               {video.map((item, index) => (
