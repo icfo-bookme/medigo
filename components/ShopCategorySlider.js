@@ -11,7 +11,7 @@ import Image from 'next/image';
 
 const ShopCategorySlider = ({ data }) => {
     return (
-        <div className="relative bg-white mt-10 sm:mt-8 py-10 md:py-5 sm:py-4 px-2">
+        <div className="relative bg-white mt-3 sm:mt-8 py-5 md:py-5 sm:py-4 px-2">
             <div className="max-w-[90rem] lg:max-w-[70rem] mx-auto">
                 <div className="flex justify-between items-center mb-5">
                     <p className="text-xl text-deepBlue-800 font-semibold tracking-wider">
@@ -74,11 +74,17 @@ const ShopCategorySlider = ({ data }) => {
                         ))}
 
                         {/* Navigation Buttons */}
-                        <button className="button-prev-slide w-[30px] h-[30px] rounded-full shadow-xl drop-shadow-lg hover:scale-150 transition duration-200 bg-gradient-to-r from-lightBlue-400 to-deepBlue-800 text-white grid place-items-center absolute top-[35px] md:top-[18px] sm:top-[25px] xls:top-[38px] xms:top-[5px] xs:top-[5px] right-[270px] lg:right-[190px] md:right-[190px] sm:right-[190px] xls:right-[150px] xms:right-[150px] xs:right-[150px] cursor-pointer">
+                        <button className="button-prev-slide w-[30px] h-[30px] rounded-full shadow-xl drop-shadow-lg 
+                        hover:scale-150 transition duration-200 bg-gradient-to-r from-lightBlue-400 to-deepBlue-800
+                         text-white grid place-items-center absolute
+                          top-[18px]  
+                          right-[270px] lg:right-[190px] md:right-[190px] sm:right-[190px] xls:right-[150px] xms:right-[150px] xs:right-[150px] 
+                          cursor-pointer">
                             <MdOutlineKeyboardArrowLeft size={20} className="text-primary" />
                         </button>
 
-                        <button className="button-next-slide w-[30px] h-[30px] rounded-full shadow-xl drop-shadow-lg hover:scale-150 transition duration-200 bg-gradient-to-r from-lightBlue-400 to-deepBlue-800 text-white grid place-items-center absolute top-[35px] md:top-[18px] sm:top-[25px] xls:top-[38px] xms:top-[5px] xs:top-[5px]  right-[190px] lg:right-[120px] md:right-[120px] sm:right-[120px] xls:right-[100px]  xms:right-[100px] xs:right-[100px] cursor-pointer">
+                        <button className="button-next-slide w-[30px] h-[30px] rounded-full shadow-xl drop-shadow-lg hover:scale-150 transition duration-200 bg-gradient-to-r from-lightBlue-400 to-deepBlue-800 text-white grid place-items-center absolute top-[18px] 
+                        right-[190px] lg:right-[120px] md:right-[120px] sm:right-[120px] xls:right-[100px]  xms:right-[100px] xs:right-[100px] cursor-pointer">
                             <MdOutlineKeyboardArrowRight size={20} className="text-primary" />
                         </button>
                     </Swiper>
