@@ -1,7 +1,7 @@
 import hostname, { ImageHostName } from '@/lib/config';
 import { useState } from 'react';
 
-import {AiFillPlusCircle} from "react-icons/ai"
+import { AiFillPlusCircle } from "react-icons/ai"
 
 import { useStatus } from '@/context/contextStatus';
 
@@ -17,233 +17,229 @@ import { destroyCookie, setCookie } from 'nookies';
 import { toast } from 'react-toastify';
 
 
-const ProductCard = ({item,index,products}) => {
+const ProductCard = ({ item, index, products }) => {
 
-   
-   const {
-     cartItems,
-     setCartItems,
-     setIsRenderMe,
-     renderMe,
-     setPromoValue,
-     setCouponId,
-   } = useStatus();
 
-   const router = useRouter();
+  const {
+    cartItems,
+    setCartItems,
+    setIsRenderMe,
+    renderMe,
+    setPromoValue,
+    setCouponId,
+  } = useStatus();
 
-   const [isOptimizedImage, setIsOptimizedImage] = useState(true);
+  const router = useRouter();
 
-   const [buttonModal,setButtonModal] = useState(false);
+  const [isOptimizedImage, setIsOptimizedImage] = useState(true);
 
-   const [cartQuantity, setCartQuantity] = useState(1)
-   
-    const containerRef = useRef(null);
+  const [buttonModal, setButtonModal] = useState(false);
 
-  
-   
-    const handleClick = (slug) =>{
-     
-      router.push(`/product/${slug}`);
+  const [cartQuantity, setCartQuantity] = useState(1)
 
+  const containerRef = useRef(null);
+
+
+
+  const handleClick = (slug) => {
+
+    router.push(`/product/${slug}`);
+
+  }
+
+  const handleClickOutside = (event) => {
+    if (containerRef.current && !containerRef.current.contains(event.target)) {
+      setButtonModal(false);
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener to detect clicks outside the component
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Cleanup event listener on component unmount
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+
+
+  const handleCart = (index) => {
+
+
+
+    setButtonModal((prev) => !prev);
+    let obj = {
+      id: item?.product_units[0]?.id,
+      product_id: item?.id,
+      name: item?.name,
+      image: item?.image,
+      generic_name: item?.generic?.generic_name,
+      quantity: 1,
+      price:
+        item?.product_units[0]?.discount == 0 ||
+          item?.product_units[0]?.discount == null
+          ? item?.product_units[0]?.price
+          : Number(
+            item?.product_units[0]?.price -
+            (item?.product_units[0]?.price *
+              item?.product_units[0]?.discount) /
+            100
+          ).toFixed(2),
+      stock: item?.product_units[0]?.qty,
+      productUnit: item?.product_units,
+      unitName: item?.product_units[0]?.unit?.unit_name,
+      slug: item?.slug,
+      mainprice: item?.product_units[0]?.price,
+      discount: Number(item?.product_units[0]?.discount),
+      sale_unit_id: item?.product_units[0]?.unit?.id,
+    };
+
+    const is_exist = cartItems.find(
+      (variation) => variation.product_id == obj.product_id
+    );
+
+
+
+    if (is_exist === undefined) {
+      setCartItems((cartItems) => [...cartItems, obj]);
+      setCookie(null, "ePharma", JSON.stringify([...cartItems, obj]), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/",
+      });
+      setPromoValue(null);
+      destroyCookie(null, "promovalue", {
+        path: "/",
+      });
+      setCouponId("");
+      destroyCookie(null, "couponid", {
+        path: "/",
+      });
+
+      setIsRenderMe(!renderMe);
+
+      toast.success("Product Added");
     }
 
-   const handleClickOutside = (event) => {
-     if (containerRef.current && !containerRef.current.contains(event.target)) {
-       setButtonModal(false);
-     }
-   };
+  }
 
-   useEffect(() => {
-     // Add event listener to detect clicks outside the component
-     document.addEventListener("mousedown", handleClickOutside);
-     return () => {
-       // Cleanup event listener on component unmount
-       document.removeEventListener("mousedown", handleClickOutside);
-     };
-   }, []);
 
-      
+  const handleDecrement = () => {
+    setCartQuantity((prev) => {
 
-    const handleCart = (index) =>{
-       
-   
+      const newQuantity = prev > 1 ? prev - 1 : 1;
 
-     setButtonModal((prev) => !prev);
-          let obj = {
-            id: item?.product_units[0]?.id,
-            product_id: item?.id,
-            name: item?.name,
-            image: item?.image,
-            generic_name: item?.generic?.generic_name,
-            quantity: 1,
-            price:
-              item?.product_units[0]?.discount == 0 ||
-              item?.product_units[0]?.discount == null
-                ? item?.product_units[0]?.price
-                : Number(
-                    item?.product_units[0]?.price -
-                      (item?.product_units[0]?.price *
-                        item?.product_units[0]?.discount) /
-                        100
-                  ).toFixed(2),
-            stock: item?.product_units[0]?.qty,
-            productUnit: item?.product_units,
-            unitName: item?.product_units[0]?.unit?.unit_name,
-            slug: item?.slug,
-            mainprice: item?.product_units[0]?.price,
-            discount: Number(item?.product_units[0]?.discount),
-            sale_unit_id: item?.product_units[0]?.unit?.id,
+      const index = cartItems.findIndex(
+        (variation) => variation.product_id === item?.id
+      );
+
+      const updatedCartItems = cartItems.map((cartItem, idx) => {
+        if (idx === index) {
+          return {
+            ...cartItem,
+            quantity: newQuantity,
           };
-
-          const is_exist = cartItems.find(
-            (variation) => variation.product_id == obj.product_id
-          );
-
-         
-
-          if (is_exist === undefined) {
-            setCartItems((cartItems) => [...cartItems, obj]);
-            setCookie(null, "ePharma", JSON.stringify([...cartItems, obj]), {
-              maxAge: 30 * 24 * 60 * 60,
-              path: "/",
-            });
-            setPromoValue(null);
-            destroyCookie(null, "promovalue", {
-              path: "/",
-            });
-            setCouponId("");
-            destroyCookie(null, "couponid", {
-              path: "/",
-            });
-
-            setIsRenderMe(!renderMe);
-
-            toast.success("Product Added");
-          }
-        
-    }
-
- 
-    const handleDecrement = () => {
-      setCartQuantity((prev) => {
-    
-        const newQuantity = prev > 1 ? prev - 1 : 1;
-
-        const index = cartItems.findIndex(
-          (variation) => variation.product_id === item?.id
-        );
-
-        const updatedCartItems = cartItems.map((cartItem, idx) => {
-          if (idx === index) {
-            return {
-              ...cartItem,
-              quantity: newQuantity,
-            };
-          }
-          return cartItem;
-        });
-
-        setCartItems(updatedCartItems);
-
-        setCookie(null, "ePharma", JSON.stringify(updatedCartItems), {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-        });
-
-        return newQuantity;
+        }
+        return cartItem;
       });
-    };
-    
 
+      setCartItems(updatedCartItems);
 
-    const handleIncrement = () => {
-      setCartQuantity((prev) => {
-        const newQuantity = prev + 1;
-
-        const index = cartItems.findIndex(
-          (variation) => variation.product_id === item?.id
-        );
-
-        const updatedCartItems = cartItems.map((item, idx) => {
-          if (idx === index) {
-            return { ...item, quantity: newQuantity };
-          }
-          return item;
-        });
-
-        setCartItems(updatedCartItems);
-
-        setCookie(null, "ePharma", JSON.stringify(updatedCartItems), {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-        });
-
-        return newQuantity;
+      setCookie(null, "ePharma", JSON.stringify(updatedCartItems), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/",
       });
-    };
-    
 
-const handleInput = (value) =>{
-
-  const numericValue = Number(value);
-
-
-  const finalValue = Number.isNaN(numericValue) ? 0 : numericValue;
-
-  setCartQuantity(finalValue);
-    
-  const index = cartItems.findIndex(
-    (variation) => variation.product_id === item?.id
-  );
-
-  const updatedCartItems = cartItems.map((item, idx) => {
-    if (idx === index) {
-      return { ...item, quantity: value  };
-    }
-    return item;
-  });
-
-  setCartItems(updatedCartItems);
-
-  setCookie(null, "ePharma", JSON.stringify(updatedCartItems), {
-    maxAge: 30 * 24 * 60 * 60,
-    path: "/",
-  });
-
-  // }
-
-
-}
+      return newQuantity;
+    });
+  };
 
 
 
- const handleDelete = () => {
+  const handleIncrement = () => {
+    setCartQuantity((prev) => {
+      const newQuantity = prev + 1;
+
+      const index = cartItems.findIndex(
+        (variation) => variation.product_id === item?.id
+      );
+
+      const updatedCartItems = cartItems.map((item, idx) => {
+        if (idx === index) {
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+
+      setCartItems(updatedCartItems);
+
+      setCookie(null, "ePharma", JSON.stringify(updatedCartItems), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/",
+      });
+
+      return newQuantity;
+    });
+  };
 
 
-   const index = cartItems.findIndex(
-     (variation) => variation.product_id === item?.id
-   );
+  const handleInput = (value) => {
+
+    const numericValue = Number(value);
 
 
-   const updatedCartItems = cartItems.filter((_, idx) => idx !== index);
+    const finalValue = Number.isNaN(numericValue) ? 0 : numericValue;
+
+    setCartQuantity(finalValue);
+
+    const index = cartItems.findIndex(
+      (variation) => variation.product_id === item?.id
+    );
+
+    const updatedCartItems = cartItems.map((item, idx) => {
+      if (idx === index) {
+        return { ...item, quantity: value };
+      }
+      return item;
+    });
+
+    setCartItems(updatedCartItems);
+
+    setCookie(null, "ePharma", JSON.stringify(updatedCartItems), {
+      maxAge: 30 * 24 * 60 * 60,
+      path: "/",
+    });
+
+    // }
 
 
-   setCartItems(updatedCartItems);
+  }
 
 
-   setCookie(null, "ePharma", JSON.stringify(updatedCartItems), {
-     maxAge: 30 * 24 * 60 * 60,
-     path: "/",
-   });
 
-   setButtonModal(false);
-   
+  const handleDelete = () => {
 
- };
 
-    
-    
+    const index = cartItems.findIndex(
+      (variation) => variation.product_id === item?.id
+    );
 
+
+    const updatedCartItems = cartItems.filter((_, idx) => idx !== index);
+
+
+    setCartItems(updatedCartItems);
+
+
+    setCookie(null, "ePharma", JSON.stringify(updatedCartItems), {
+      maxAge: 30 * 24 * 60 * 60,
+      path: "/",
+    });
+
+    setButtonModal(false);
+
+
+  };
 
   return (
     <>
@@ -251,27 +247,38 @@ const handleInput = (value) =>{
         <div className=" group rounded-md items-center justify-center card-shadow  font-body border border-gray-200">
           <div className="relative">
             <div className=" h-[200px]  p-3 xs:h-auto xms:h-[180px]  rounded-md  relative">
-              <Image
-                src={
-                  isOptimizedImage
-                    ? `${ImageHostName}/storage/product/${item?.image}`
-                    : "/image/placeholder_600x.webp"
-                }
-                className="h-full w-full object-contain group-hover:scale-110 ease-in-out duration-500"
-                height={500}
-                width={500}
-                priority
-                onClick={() => handleClick(item?.slug)}
-                unoptimized={!isOptimizedImage}
-                onError={() => setIsOptimizedImage(false)}
-                alt="product"
-              />
+              {item.yt_video ? (
+                <div className="relative w-full h-36 p-0 rounded-lg overflow-hidden">
+                  <iframe
+                    className="w-full h-full rounded-lg"
+                    src={`https://www.youtube.com/embed/${item.yt_video.split("v=")[1]}?autoplay=1&mute=1&controls=1`}
+                    title="YouTube video"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <Image
+                  src={
+                    isOptimizedImage
+                      ? `${ImageHostName}/storage/product/${item?.image}`
+                      : "/image/placeholder_600x.webp"
+                  }
+                  className="h-full w-full object-contain group-hover:scale-110 ease-in-out duration-500"
+                  height={500}
+                  width={500}
+                  priority
+                  onClick={() => handleClick(item?.slug)}
+                  unoptimized={!isOptimizedImage}
+                  onError={() => setIsOptimizedImage(false)}
+                  alt="product"
+                />
+              )}
               {buttonModal ? (
                 <div
                   ref={containerRef}
-                  className={`absolute bottom-2 right-3  ${
-                    buttonModal ? "w-[100px]" : "w-0"
-                  } overflow-hidden flex items-center justify-center bg-white border border-gray-200 py-1 px-2 rounded-full outline-none`}
+                  className={`absolute bottom-2 right-3  ${buttonModal ? "w-[100px]" : "w-0"
+                    } overflow-hidden flex items-center justify-center bg-white border border-gray-200 py-1 px-2 rounded-full outline-none`}
                 >
                   {cartItems[
                     cartItems.findIndex(
@@ -298,17 +305,17 @@ const handleInput = (value) =>{
                   <input
                     type="text"
                     value={
-                     
+
                       cartQuantity
                     }
                     className="w-full text-center bg-white text-black font-semibold outline-none"
                     onChange={(e) => {
                       const value = e.target.value;
 
-                   
-                        handleInput(Number(value))
-                     
-                      
+
+                      handleInput(Number(value))
+
+
                     }}
                   />
                   <button onClick={() => handleIncrement(index)}>
@@ -376,7 +383,7 @@ const handleInput = (value) =>{
 
               <div className=" px-1 pt-2 h-[50px]">
                 {item?.product_units[0]?.discount == null ||
-                Number(item?.product_units[0]?.discount) == 0 ? null : (
+                  Number(item?.product_units[0]?.discount) == 0 ? null : (
                   <p className="text-sm  text-gray-400 font-semibold line-through">
                     ৳ {Number(item?.product_units[0]?.price).toFixed(2)}
                   </p>
@@ -387,9 +394,9 @@ const handleInput = (value) =>{
                       ৳{" "}
                       {Number(
                         item?.product_units[0]?.price -
-                          (item?.product_units[0]?.price *
-                            item?.product_units[0]?.discount) /
-                            100
+                        (item?.product_units[0]?.price *
+                          item?.product_units[0]?.discount) /
+                        100
                       ).toFixed(2)}
                     </p>
                   ) : (
@@ -399,7 +406,7 @@ const handleInput = (value) =>{
                     </p>
                   )}
                   {item?.product_units[0]?.discount == null ||
-                  Number(item?.product_units[0]?.discount) == 0 ? null : (
+                    Number(item?.product_units[0]?.discount) == 0 ? null : (
                     <div>
                       <button className="text-base xms:text-sm xs:text-xs  font-semibold rounded-md text-red-400">
                         ({item?.product_units[0]?.discount}% )

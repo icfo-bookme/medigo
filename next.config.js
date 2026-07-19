@@ -1,24 +1,20 @@
-module.exports = {
-  reactStrictMode: false,
-  // onDemandEntries: {
-  //   maxInactiveAge: 25 * 1000,
-  //   pagesBufferLength: 2,
-  // },
-  // experimental: {
- 
-  //   largePageDataBytes: 128 * 100000,
-  // },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
   images: {
-    minimumCacheTTL: 120,
+    // Combine everything into ONE images object
+    unoptimized: true, 
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "admin.medigo.com.bd",
       },
       {
         protocol: "http",
-        hostname: "**",
+        hostname: "medigo.com.bd",
       },
     ],
   },
 };
+
+module.exports = nextConfig;

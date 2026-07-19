@@ -12,7 +12,7 @@ const Checkout = () => {
 
   const [selectedAddress, setSelectedAddress] = useState('');
 
-  const { editableAddress, anotherAddress, token } = useStatus();
+  const { editableAddress, anotherAddress, fullAddress, token } = useStatus();
 
   const [addressValueSelect, setAddressValueSelect] = useState(null);
 
@@ -37,15 +37,15 @@ const Checkout = () => {
 
 
 
-  const handleSelectAddress = (val) => {
+  const handleSelectAddress = (val, addressValue) => {
 
     if (val == 1) {
-      setSelectedAddress(editableAddress);
+      setSelectedAddress(addressValue || editableAddress || fullAddress);
       setAddressValueSelect(1);
     }
 
     if (val == 2) {
-      setSelectedAddress(anotherAddress);
+      setSelectedAddress(addressValue || anotherAddress);
       setAddressValueSelect(2);
     }
 

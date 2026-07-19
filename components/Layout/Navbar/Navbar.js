@@ -20,7 +20,7 @@ import Login from "@/components/Auth/Login";
 import Register from "@/components/Auth/Register";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 // google map
-    
+
 
 
 const Navbar = ({ data, setFeedbackModalOpen, words }) => {
@@ -66,47 +66,47 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
   const [searchVal, setSearchVal] = useState("");
   const [userProfileData, setUserProfileData] = useState({});
   const router = useRouter();
-  
+
 
   const menuRef = useRef();
-   const [index, setIndex] = useState(0);
- const [subIndex, setSubIndex] = useState(0);
+  const [index, setIndex] = useState(0);
+  const [subIndex, setSubIndex] = useState(0);
   const [word, setWord] = useState("");
 
-   const [isVisible, setIsVisible] = useState(true);
-   const displayDuration = 3000;
-   const idleDuration = 250; // 1 second
+  const [isVisible, setIsVisible] = useState(true);
+  const displayDuration = 3000;
+  const idleDuration = 250; // 1 second
 
-   // type write effect in search bar
-   useEffect(() => {
-     if (words?.length > 0) {
-       if (subIndex < words[index].length) {
-         const timeout = setTimeout(() => {
-           setWord((prevWord) => prevWord + words[index][subIndex]);
-           setSubIndex((prevSubIndex) => prevSubIndex + 1);
-         }, 150);
-         return () => clearTimeout(timeout);
-       } else if (word.length > 0 && isVisible) {
-         const timeout = setTimeout(() => {
-           setIsVisible(false);
-         }, displayDuration);
-         return () => clearTimeout(timeout);
-       } else if (!isVisible && word.length > 0) {
-         const timeout = setTimeout(() => {
-           setWord((prevWord) => prevWord.slice(0, -1));
-         }, 100);
-         return () => clearTimeout(timeout);
-       } else {
-         const timeout = setTimeout(() => {
-           setSubIndex(0);
-           setWord("");
-           setIsVisible(true);
-           setIndex((prevIndex) => (prevIndex + 1) % words.length);
-         }, idleDuration);
-         return () => clearTimeout(timeout);
-       }
-     }
-   }, [subIndex, index, word, isVisible, words]);
+  // type write effect in search bar
+  useEffect(() => {
+    if (words?.length > 0) {
+      if (subIndex < words[index].length) {
+        const timeout = setTimeout(() => {
+          setWord((prevWord) => prevWord + words[index][subIndex]);
+          setSubIndex((prevSubIndex) => prevSubIndex + 1);
+        }, 150);
+        return () => clearTimeout(timeout);
+      } else if (word.length > 0 && isVisible) {
+        const timeout = setTimeout(() => {
+          setIsVisible(false);
+        }, displayDuration);
+        return () => clearTimeout(timeout);
+      } else if (!isVisible && word.length > 0) {
+        const timeout = setTimeout(() => {
+          setWord((prevWord) => prevWord.slice(0, -1));
+        }, 100);
+        return () => clearTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => {
+          setSubIndex(0);
+          setWord("");
+          setIsVisible(true);
+          setIndex((prevIndex) => (prevIndex + 1) % words.length);
+        }, idleDuration);
+        return () => clearTimeout(timeout);
+      }
+    }
+  }, [subIndex, index, word, isVisible, words]);
 
   useEffect(() => {
     function handleClickOutside() {
@@ -129,8 +129,8 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
 
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setOpen(false);
-      
-      } 
+
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -310,7 +310,7 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
   }, [keywords]);
 
 
-  
+
 
 
   const handleSearchClick = () => {
@@ -326,10 +326,6 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
     setIsFixed(false);
   };
 
-
-  
-
-
   return (
     <>
       <div className="sticky left-0 right-0  top-0 z-10 bg-white shadow ">
@@ -338,11 +334,12 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
             <Link href={`/`}>
               <div className="flex justify-center lg:w-auto lg:flex-1">
                 <Image
-                  width={60}
-                  height={10}
                   src="/image/logo.png"
-                  className="object-contain h-20 xls:h-20 xms:h-20 xs:h-16"
                   alt="logo"
+                  width={200}
+                  height={80}
+                  className="object-contain h-20"
+                  priority
                 />
               </div>
             </Link>
@@ -829,7 +826,7 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
                         <div className="flex space-x-2 items-center text-black xms:text-sm xs:text-xs">
                           <p>Deliver to:</p>
                           <p>
-                           {city} 
+                            {city}
                           </p>
                         </div>
                       )}

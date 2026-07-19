@@ -16,9 +16,7 @@ const DeliveryAddress = ({
   setOptionalAddress,
 }) => {
   const [addressModalOpen, setAddressModalOpen] = useState(false);
-
-  const [shippingAddressModalOpen, setShippingAddressModalOpen] =
-    useState(false);
+  const [shippingAddressModalOpen, setShippingAddressModalOpen] = useState(false);
 
   const {
     fullAddress,
@@ -31,7 +29,6 @@ const DeliveryAddress = ({
     setQuarter,
     setSuburb,
     anotherAddress,
-
     name,
     phone,
     setPhone,
@@ -39,16 +36,33 @@ const DeliveryAddress = ({
     token,
   } = useStatus();
 
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
   const [flag, setFlag] = useState(false);
-
-  const [val, setVal] = useState("");
+  const [val, setVal] = useState('');
 
   useEffect(() => {
     setEditableAddress(fullAddress);
   }, [fullAddress]);
+
+  // Auto-select logic:
+  // If BOTH fullAddress and anotherAddress exist → default select "Another place" (2)
+  // If only fullAddress exists → auto select "Your place" (1)
+  // If only anotherAddress exists → auto select "Another place" (2)
+  useEffect(() => {
+    if (!token) {
+      if (fullAddress && anotherAddress) {
+        // Both available → default to Another place
+        handleSelectAddress(2, anotherAddress);
+      } else if (fullAddress && !anotherAddress) {
+        // Only Your place available — pass fullAddress directly so it's not stale
+        handleSelectAddress(1, fullAddress);
+      } else if (!fullAddress && anotherAddress) {
+        // Only Another place available
+        handleSelectAddress(2, anotherAddress);
+      }
+    }
+  }, [fullAddress, anotherAddress, token]);
 
   const handleAddAddress = () => {
     setAddressModalOpen(true);
@@ -64,26 +78,24 @@ const DeliveryAddress = ({
   };
 
   const handleSave = () => {
-    if (val == "") {
+    if (val === '') {
       setEditableAddress(fullAddress);
     } else {
       setEditableAddress(`${val}`);
     }
-
-    setCookie(null, "editableaddress", `${val}`, {
+    setCookie(null, 'editableaddress', `${val}`, {
       maxAge: 24 * 60 * 60,
-      path: "/",
+      path: '/',
     });
-
     setFlag(false);
   };
 
   useEffect(() => {
-    if (isAlive == true) {
-      setFullAddress("");
-      setCity("");
-      setQuarter("");
-      setSuburb("");
+    if (isAlive === true) {
+      setFullAddress('');
+      setCity('');
+      setQuarter('');
+      setSuburb('');
     }
   }, [isAlive]);
 
@@ -99,24 +111,15 @@ const DeliveryAddress = ({
         },
         (error) => {
           console.log(error);
-          destroyCookie({}, "quarter", {
-            path: "/",
-          });
-          destroyCookie({}, "suburb", {
-            path: "/",
-          });
-
-          destroyCookie({}, "city", {
-            path: "/",
-          });
-          destroyCookie({}, "fullAddress", {
-            path: "/",
-          });
+          destroyCookie({}, 'quarter', { path: '/' });
+          destroyCookie({}, 'suburb', { path: '/' });
+          destroyCookie({}, 'city', { path: '/' });
+          destroyCookie({}, 'fullAddress', { path: '/' });
           setIsAlive(!isAlive);
         }
       );
     } else {
-      console.log("Geolocation is not supported by this browser.");
+      console.log('Geolocation is not supported by this browser.');
     }
   };
 
@@ -126,28 +129,25 @@ const DeliveryAddress = ({
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
       )
       .then((response) => {
-        // console.log("res.....",response);
         setFullAddress(response?.data?.display_name);
-        setCookie(null, "fullAddress", response?.data?.display_name, {
+        setCookie(null, 'fullAddress', response?.data?.display_name, {
           maxAge: 24 * 60 * 60,
-          path: "/",
+          path: '/',
         });
         setCity(response?.data?.address?.city);
-        setCookie(null, "city", response?.data?.address?.city, {
+        setCookie(null, 'city', response?.data?.address?.city, {
           maxAge: 24 * 60 * 60,
-          path: "/",
+          path: '/',
         });
-
         setQuarter(response?.data?.address?.quarter);
-        setCookie(null, "quarter", response?.data?.address?.quarter, {
+        setCookie(null, 'quarter', response?.data?.address?.quarter, {
           maxAge: 24 * 60 * 60,
-          path: "/",
+          path: '/',
         });
-
         setSuburb(response?.data?.address?.suburb);
-        setCookie(null, "suburb", response?.data?.address?.suburb, {
+        setCookie(null, 'suburb', response?.data?.address?.suburb, {
           maxAge: 24 * 60 * 60,
-          path: "/",
+          path: '/',
         });
       })
       .catch((error) => {
@@ -162,21 +162,24 @@ const DeliveryAddress = ({
   return (
     <div className="col-span-7 md:col-span-full sm:col-span-full xls:col-span-full xms:col-span-full xs:col-span-full p-5 xls:p-2 xms:p-2 xs:p-1 border-2 md:mb-4 sm:mb-4 border-gray-100 rounded-md">
       <div className="border-b-2 border-gray-100 pb-7">
+
+        {/* Name */}
         <div className="w-1/2">
-          <p className="text-base font-normal  py-2 text-black">
-            Name <span style={{ color: "red" }}>*</span>
+          <p className="text-base font-normal py-2 text-black">
+            Name <span style={{ color: 'red' }}>*</span>
           </p>
           <input
             className="border-[1px] h-[40px] w-full pl-2 rounded-md outline-none bg-white text-black"
             placeholder="Enter name..."
             value={name}
-            // readOnly={token && name !== '' ? true : false}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
+
+        {/* Phone */}
         <div className="w-1/2 pb-4">
-          <p className="text-base font-normal  py-2 text-black">
-            Phone number <span style={{ color: "red" }}>*</span>
+          <p className="text-base font-normal py-2 text-black">
+            Phone number <span style={{ color: 'red' }}>*</span>
           </p>
           <input
             className="border-[1px] h-[40px] w-full pl-2 rounded-md outline-none bg-white text-black"
@@ -189,6 +192,8 @@ const DeliveryAddress = ({
 
         {!token || (token && !address?.information) ? (
           <div>
+
+            {/* ── YOUR PLACE ── */}
             <div className="flex space-x-4 items-center">
               <p className="font-semibold font-body tracking-wider dark:text-black">
                 Your place
@@ -199,7 +204,7 @@ const DeliveryAddress = ({
               <div className="grid grid-cols-1 mt-3 ml-7">
                 <div className="flex space-x-2 mb-2 items-center">
                   <p className="text-black xs:text-sm">
-                    You are missing your area ?
+                    You are missing your area?
                   </p>
                   {flag ? null : (
                     <button
@@ -210,29 +215,29 @@ const DeliveryAddress = ({
                     </button>
                   )}
                 </div>
+
                 {!flag ? (
-                  <>
-                    {addressValueSelect == 1 ? (
-                      <div className="p-3 lg:p-2 w-[400px] xls:w-[300px] xms:w-[280px] xs:w-[250px] bg-deepBlue-800 rounded-md cursor-pointer group">
-                        <p className="text-white text-sm lg:text-xs">
-                          <span>{editableAddress}</span>
-                        </p>
-                      </div>
-                    ) : (
-                      <div
-                        className="p-3 lg:p-2 w-[400px] xls:w-[300px] xms:w-[280px] xs:w-[250px] border-2 border-deepBlue-800 rounded-md cursor-pointer group"
-                        onClick={() => handleSelectAddress(1)}
-                      >
-                        <p className="text-gray-400 text-sm lg:text-xs">
-                          <span>{editableAddress}</span>
-                        </p>
-                      </div>
-                    )}
-                  </>
+                  // Manually selectable — highlighted only if addressValueSelect === 1
+                  addressValueSelect === 1 ? (
+                    <div className="p-3 lg:p-2 w-[400px] xls:w-[300px] xms:w-[280px] xs:w-[250px] bg-deepBlue-800 rounded-md cursor-pointer group">
+                      <p className="text-white text-sm lg:text-xs">
+                        <span>{editableAddress}</span>
+                      </p>
+                    </div>
+                  ) : (
+                <div
+                      className="p-3 lg:p-2 w-[400px] xls:w-[300px] xms:w-[280px] xs:w-[250px] border-2 border-deepBlue-800 rounded-md cursor-pointer group"
+                      onClick={() => handleSelectAddress(1, editableAddress || fullAddress)}
+                    >
+                      <p className="text-gray-400 text-sm lg:text-xs">
+                        <span>{editableAddress}</span>
+                      </p>
+                    </div>
+                  )
                 ) : (
                   <div>
                     <textarea
-                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-deepBlue-800  dark:bg-white dark:placeholder-gray-400 dark:text-black"
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-deepBlue-800 dark:bg-white dark:placeholder-gray-400 dark:text-black"
                       onChange={(e) => handleChange(e.target.value)}
                     >
                       {editableAddress}
@@ -255,19 +260,22 @@ const DeliveryAddress = ({
                 )}
               </div>
             ) : (
+              // No GPS location found
               <div className="flex space-x-2 pl-14">
-                <span className="text-black">please select your location </span>
+                <span className="text-black">please select your location</span>
                 <span onClick={handleGetLocation} className="cursor-pointer">
                   <svg
                     className="fill-current text-myColor-500 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M13 1L13.001 4.06201C16.6192 4.51365 19.4869 7.38163 19.9381 11L23 11V13L19.938 13.001C19.4864 16.6189 16.6189 19.4864 13.001 19.938L13 23H11L11 19.9381C7.38163 19.4869 4.51365 16.6192 4.06201 13.001L1 13V11L4.06189 11C4.51312 7.38129 7.38129 4.51312 11 4.06189L11 1H13ZM12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6ZM12 10C13.1046 10 14 10.8954 14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10Z"></path>
+                    <path d="M13 1L13.001 4.06201C16.6192 4.51365 19.4869 7.38163 19.9381 11L23 11V13L19.938 13.001C19.4864 16.6189 16.6189 19.4864 13.001 19.938L13 23H11L11 19.9381C7.38163 19.4869 4.51365 16.6192 4.06201 13.001L1 13V11L4.06189 11C4.51312 7.38129 7.38129 4.51312 11 4.06189L11 1H13ZM12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6ZM12 10C13.1046 10 14 10.8954 14 12C14 13.1046 13.1046 14 12 14C10.8954 14 10 13.1046 10 12C10 10.8954 10.8954 10 12 10Z" />
                   </svg>
                 </span>
               </div>
             )}
+
+            {/* ── ANOTHER PLACE ── */}
             <div className="pt-7">
               <div className="flex space-x-4 items-center">
                 <p className="font-semibold font-body tracking-wider dark:text-black">
@@ -276,42 +284,41 @@ const DeliveryAddress = ({
               </div>
               <div className="mt-4 ml-14">
                 {anotherAddress ? (
-                  <>
-                    {addressValueSelect == 2 ? (
-                      <div className="p-3 lg:p-2 w-[400px] xls:w-[300px] xms:w-[260px] xs:w-[220px]  bg-deepBlue-800 rounded-md cursor-pointer grid grid-cols-12 group">
-                        <p className="text-white text-sm lg:text-xs col-span-11">
-                          <span>{anotherAddress}</span>
-                        </p>
-                        <p className="col-span-1" onClick={handleAddAddress}>
-                          <svg
-                            className="fill-current text-white h-5 w-5"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M15.7279 9.57629L14.3137 8.16207L5 17.4758V18.89H6.41421L15.7279 9.57629ZM17.1421 8.16207L18.5563 6.74786L17.1421 5.33365L15.7279 6.74786L17.1421 8.16207ZM7.24264 20.89H3V16.6474L16.435 3.21233C16.8256 2.8218 17.4587 2.8218 17.8492 3.21233L20.6777 6.04075C21.0682 6.43128 21.0682 7.06444 20.6777 7.45497L7.24264 20.89Z"></path>
-                          </svg>
-                        </p>
-                      </div>
-                    ) : (
-                      <div
-                        className="p-3 lg:p-2 w-[400px] xls:w-[300px] xms:w-[260px] xs:w-[220px] border-2 border-deepBlue-800 rounded-md cursor-pointer grid grid-cols-12 group"
-                        onClick={() => handleSelectAddress(2)}
-                      >
-                        <p className="text-gray-400 text-sm lg:text-xs col-span-11">
-                          <span>{anotherAddress}</span>
-                        </p>
-                        <p className="col-span-1" onClick={handleAddAddress}>
-                          <svg
-                            className="fill-current text-deepBlue-800 h-5 w-5"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M15.7279 9.57629L14.3137 8.16207L5 17.4758V18.89H6.41421L15.7279 9.57629ZM17.1421 8.16207L18.5563 6.74786L17.1421 5.33365L15.7279 6.74786L17.1421 8.16207ZM7.24264 20.89H3V16.6474L16.435 3.21233C16.8256 2.8218 17.4587 2.8218 17.8492 3.21233L20.6777 6.04075C21.0682 6.43128 21.0682 7.06444 20.6777 7.45497L7.24264 20.89Z"></path>
-                          </svg>
-                        </p>
-                      </div>
-                    )}
-                  </>
+                  // Highlighted if addressValueSelect === 2
+                  addressValueSelect === 2 ? (
+                    <div className="p-3 lg:p-2 w-[400px] xls:w-[300px] xms:w-[260px] xs:w-[220px] bg-deepBlue-800 rounded-md cursor-pointer grid grid-cols-12 group">
+                      <p className="text-white text-sm lg:text-xs col-span-11">
+                        <span>{anotherAddress}</span>
+                      </p>
+                      <p className="col-span-1" onClick={(e) => { e.stopPropagation(); handleAddAddress(); }}>
+                        <svg
+                          className="fill-current text-white h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M15.7279 9.57629L14.3137 8.16207L5 17.4758V18.89H6.41421L15.7279 9.57629ZM17.1421 8.16207L18.5563 6.74786L17.1421 5.33365L15.7279 6.74786L17.1421 8.16207ZM7.24264 20.89H3V16.6474L16.435 3.21233C16.8256 2.8218 17.4587 2.8218 17.8492 3.21233L20.6777 6.04075C21.0682 6.43128 21.0682 7.06444 20.6777 7.45497L7.24264 20.89Z" />
+                        </svg>
+                      </p>
+                    </div>
+                  ) : (
+                <div
+                      className="p-3 lg:p-2 w-[400px] xls:w-[300px] xms:w-[260px] xs:w-[220px] border-2 border-deepBlue-800 rounded-md cursor-pointer grid grid-cols-12 group"
+                      onClick={() => handleSelectAddress(2, anotherAddress)}
+                    >
+                      <p className="text-gray-400 text-sm lg:text-xs col-span-11">
+                        <span>{anotherAddress}</span>
+                      </p>
+                      <p className="col-span-1" onClick={(e) => { e.stopPropagation(); handleAddAddress(); }}>
+                        <svg
+                          className="fill-current text-deepBlue-800 h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M15.7279 9.57629L14.3137 8.16207L5 17.4758V18.89H6.41421L15.7279 9.57629ZM17.1421 8.16207L18.5563 6.74786L17.1421 5.33365L15.7279 6.74786L17.1421 8.16207ZM7.24264 20.89H3V16.6474L16.435 3.21233C16.8256 2.8218 17.4587 2.8218 17.8492 3.21233L20.6777 6.04075C21.0682 6.43128 21.0682 7.06444 20.6777 7.45497L7.24264 20.89Z" />
+                        </svg>
+                      </p>
+                    </div>
+                  )
                 ) : (
                   <div
                     className="p-3 lg:p-2 w-[300px] border-deepBlue-800 rounded-md cursor-pointer group"
@@ -324,7 +331,7 @@ const DeliveryAddress = ({
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
                         >
-                          <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path>
+                          <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z" />
                         </svg>
                       </div>
                       <p className="text-deepBlue-800">Add address</p>
@@ -333,17 +340,17 @@ const DeliveryAddress = ({
                 )}
               </div>
             </div>
+
           </div>
         ) : (
+          // Logged-in user with saved address
           <div className="bg-white card-shadow flex justify-between text-black py-2 px-2">
             <div className="flex items-center space-x-3">
               <p className="bg-gradient-to-r from-sky-600 to-sky-400 text-white px-1 rounded-md">
                 {address?.label}
               </p>
-
               <p>{address?.information}</p>
             </div>
-
             <button
               className="text-sky-500 font-semibold tracking-wider uppercase"
               onClick={() => handleShippingAddress()}
@@ -354,6 +361,7 @@ const DeliveryAddress = ({
         )}
       </div>
 
+      {/* Delivery Instructions */}
       <div className="pt-7">
         <div className="flex space-x-4 items-center">
           <p className="font-semibold font-body tracking-wider text-black">
@@ -364,11 +372,10 @@ const DeliveryAddress = ({
           <label className="text-gray-700 text-sm">
             Delivery Instructions Note
           </label>
-
           <textarea
             rows="4"
             onChange={(event) => setOptionalAddress(event.target.value)}
-            className="block mt-3 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-deepBlue-800 outline-none  dark:bg-white  dark:text-black"
+            className="block mt-3 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-deepBlue-800 outline-none dark:bg-white dark:text-black"
             placeholder="Write your thoughts here..."
           ></textarea>
         </div>
@@ -391,4 +398,4 @@ const DeliveryAddress = ({
   );
 };
 
-export default DeliveryAddress
+export default DeliveryAddress;

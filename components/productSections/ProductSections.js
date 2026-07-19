@@ -14,8 +14,6 @@ import {
 
 const ProductSections = ({products,section}) => {
  
-
-
   return (
     <div className="relative bg-white mt-10 sm:mt-8 xls:mt-4 xms:mt-4 xs:mt-4 py-10 md:py-5 sm:py-4 xls:py-3 xms:py-3 xs:py-2 md:px-2 sm:px-5 xls:px-3 xms:px-2 xs:px-2 px-2">
       <div className="max-w-[90rem] lg:max-w-[70rem]  mx-auto">

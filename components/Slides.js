@@ -39,6 +39,7 @@ const Slides = ({slider}) => {
                       height={400}
                       width={1920}
                       alt={`slider-${index}`}
+                      priority={true}
                     />
                   </Link>
                 ) : (
@@ -48,6 +49,8 @@ const Slides = ({slider}) => {
                     height={400}
                     width={1920}
                     alt={`slider-${index}`}
+                    priority={true}
+
                   />
                 )}
               </div>

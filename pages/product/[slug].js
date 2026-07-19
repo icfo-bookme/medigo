@@ -6,7 +6,12 @@ import request from '@/lib/request';
 
 
 const ProductDetails = ({ data, brandproduct, totalData }) => {
+  const getYoutubeId = (url) => {
+    const regExp =
+      /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/;
 
+    return url.match(regExp)?.[1] || "";
+  };
   return (
     <>
       {/* <Head>
@@ -75,7 +80,25 @@ const ProductDetails = ({ data, brandproduct, totalData }) => {
       <div className="bg-[#F2F4F8] pt-3">
         <div className="max-w-7xl lg:max-w-[70rem] mx-auto pb-3">
           <div className="grid grid-cols-2 pt-6 mb-4 bg-white px-7 shadow-md rounded-md gap-6">
-            <ImageGallery image={data?.image} />
+
+            {data.yt_video ? (
+              <div className="relative w-full h-64 p-3 rounded-lg overflow-hidden">
+                <iframe
+                  className="w-full h-full rounded-lg"
+                  src={`https://www.youtube-nocookie.com/embed/${getYoutubeId(
+                    data.yt_video
+                  )}?autoplay=0&mute=1&playsinline=1&rel=0&controls=1&enablejsapi=0`}
+                  title="YouTube video"
+                  frameBorder="0"
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <ImageGallery image={data?.image} />
+            )}
+
 
             <DetailSection data={data} />
           </div>
@@ -174,13 +197,13 @@ const ProductDetails = ({ data, brandproduct, totalData }) => {
 export default ProductDetails;
 
 export async function getServerSideProps(context) {
-
+  console.log("context", context.query.slug);
   let products = await request(`product-details/${context.query.slug}`, "");
 
 
-       let brandproduct = await request(
-         `product-generic-similar/${context.query.slug}`
-       );
+  let brandproduct = await request(
+    `product-generic-similar/${context.query.slug}`
+  );
   return {
     props: {
       data: products?.data || null,

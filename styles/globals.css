@@ -261,6 +261,19 @@ ol {
     }
     } 
 
+    .custom-toast-container.Toastify__toast-container--bottom-right {
+  top: auto !important;
+  bottom: 50px !important;
+  right: 1rem !important;
+}
+
+@media (min-width: 1024px) {
+  .custom-toast-container.Toastify__toast-container--bottom-right {
+    top: 65px !important;
+    bottom: auto !important;
+    right: 1rem !important;
+  }
+}
 
 .line-clamp-2{
   overflow: hidden;

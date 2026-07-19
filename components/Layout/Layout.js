@@ -138,7 +138,6 @@ const Layout = ({ children }) => {
         <Notification />
         <SideProfileMenu />
         <BottomNavbar setFeedbackModalOpen={setFeedbackModalOpen} />
-
         <FeedbackModal
           feedbackModalOpen={feedbackModalOpen}
           setFeedbackModalOpen={setFeedbackModalOpen}

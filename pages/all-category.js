@@ -27,6 +27,7 @@ const AllCategory = ({ cat }) => {
                               alt='product'
                               src={`${ImageHostName}/storage/product/${item?.image}`}
                               className="h-[50px] w-[50px] object-contain group-hover:scale-110 ease-in-out duration-500"
+                              priority={true}
                             />
                           </div>
                           <div className="p-2">
