@@ -336,8 +336,8 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
                 <Image
                   src="/image/logo.png"
                   alt="logo"
-                  width={200}
-                  height={80}
+                  width={100}
+                  height={70}
                   className="object-contain h-20"
                   priority
                 />
