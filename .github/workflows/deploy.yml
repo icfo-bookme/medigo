@@ -1,0 +1,25 @@
+name: Auto Deploy to Hostinger VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy via Git Pull
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH into VPS and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd /var/www/medigo
+            git pull origin main
+            npm ci --omit=dev
+            npm run build
+            pm2 start ecosystem.config.js || pm2 restart ecosystem.config.js
