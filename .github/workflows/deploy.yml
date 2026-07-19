@@ -18,8 +18,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            cd /var/www/medigo
-            git pull origin main
-            npm ci --omit=dev
-            npm run build
-            pm2 start ecosystem.config.js || pm2 restart ecosystem.config.js
+            cd /var/www/medigo || exit 1
+            git pull origin main 2>&1 || echo "Git pull failed, continuing..."
+            npm ci --omit=dev 2>&1 || npm install --production 2>&1
+            npm run build 2>&1 || { echo "Build failed"; exit 1; }
+            pm2 delete medigo 2>/dev/null || true
+            pm2 start ecosystem.config.js 2>&1
+            pm2 save 2>&1 || true
