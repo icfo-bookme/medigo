@@ -46,7 +46,7 @@ const SidebarSubCategory = ({ item }) => {
          w-full text-sm font-medium py-4 border-b border-gray-300 pl-5`}
       >
         <div
-          className="flex space-x-5 items-center"
+          className="flex space-x-2 items-center"
           onClick={() => handleClick(item?.slug)}
         >
           <div className="flex items-center justify-center bg-white rounded-full shadow-sm ">
@@ -65,7 +65,7 @@ const SidebarSubCategory = ({ item }) => {
             className={`${router?.query?.slug === item?.slug
               ? "text-myColor-500"
               : "text-black"
-              } uppercase font-semibold text-sm group-hover:text-myColor-500 line-clamp-1`}
+              }  font-bold text-base group-hover:text-myColor-500 `}
           >
             {item?.name}
           </p>
