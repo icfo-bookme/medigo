@@ -334,7 +334,7 @@ const Navbar = ({ data, setFeedbackModalOpen, words }) => {
             <Link href={`/`}>
               <div className="flex justify-center lg:w-auto lg:flex-1">
                 <Image
-                  src="/image/logo3.png"
+                  src="/image/logo.png"
                   alt="logo"
                   width={100}
                   height={70}
