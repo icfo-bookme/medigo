@@ -369,9 +369,13 @@ const ProductCard = ({ item, index, products }) => {
                 className="text-gray-700 font-semibold text-sm tracking-wider pb-2 text-left h-[25px]"
                 onClick={() => handleClick(item?.slug, index, item?.id)}
               >
-                <span className="line-clamp-1">
-                  {item?.generic?.generic_name}
-                </span>{" "}
+                {item?.generic?.generic_name == "n/a" ? (
+                  <span className="line-clamp-1"></span>
+                ) : (
+                  <span className="line-clamp-1">
+                    {item?.generic?.generic_name}
+                  </span>
+                )}{" "}
               </p>
 
               <p
@@ -391,7 +395,7 @@ const ProductCard = ({ item, index, products }) => {
                 <div className="flex space-x-2 items-center">
                   {item?.product_units[0]?.discount !== null ? (
                     <p className="text-base xms:text-sm xs:text-xs  text-gray-700 font-semibold">
-                      ৳{" "}
+                      ৳{" "}A
                       {Number(
                         item?.product_units[0]?.price -
                         (item?.product_units[0]?.price *
